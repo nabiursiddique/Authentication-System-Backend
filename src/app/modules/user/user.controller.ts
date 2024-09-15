@@ -13,6 +13,17 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllUsersFromDB();
+  sendResponse(res, {
+    success: true,
+    statusCode: 201,
+    message: 'Users retrieved successfully',
+    data: result,
+  });
+});
+
 export const UserControllers = {
   createUser,
+  getAllUsers,
 };
