@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const logInUserValidationSchema = z.object({
+const signInUserValidationSchema = z.object({
   email: z
     .string()
     .trim()
@@ -10,5 +10,5 @@ const logInUserValidationSchema = z.object({
 });
 
 export const AuthValidations = {
-  logInUserValidationSchema,
+  signInUserValidationSchema,
 };
