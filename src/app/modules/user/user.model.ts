@@ -1,7 +1,8 @@
 import { model, Schema } from 'mongoose';
-import { TUser } from './user.interface';
+import { TUser, UserModel } from './user.interface';
+import bcrypt from 'bcrypt';
 
-const userSchema = new Schema<TUser>(
+const userSchema = new Schema<TUser, UserModel>(
   {
     name: {
       type: String,
@@ -35,4 +36,19 @@ const userSchema = new Schema<TUser>(
   },
 );
 
-export const User = model('User', userSchema);
+//* By using User model we can access these functions from the model
+
+// function for finding a user in db (using statics feature of mongoose)
+userSchema.statics.isUserExistsByEmail = async function (email) {
+  return await User.findOne({ email: email });
+};
+
+// function for checking if the user provided password is correct or not
+userSchema.statics.isPasswordMatched = async function (
+  plainTextPassword,
+  hashPassword,
+) {
+  return await bcrypt.compare(plainTextPassword, hashPassword);
+};
+
+export const User = model<TUser, UserModel>('User', userSchema);
