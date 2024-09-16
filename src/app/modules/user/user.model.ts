@@ -18,21 +18,16 @@ const userSchema = new Schema<TUser>(
       type: String,
       required: [true, 'Password is required'],
     },
-    phone: {
-      type: String,
-      trim: true,
-      required: [true, 'Phone is required'],
-    },
-    address: {
-      type: String,
-      required: [true, 'Address is required'],
-    },
     role: {
       type: String,
       enum: {
         values: ['admin', 'user'],
         message: '{VALUE} is not a valid role',
       },
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
