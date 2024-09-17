@@ -8,11 +8,16 @@ export interface TUser {
   name: string;
   email: string;
   password: string;
+  passwordChangedAt?: Date;
   role: TUserRole;
   isDeleted: boolean;
 }
 
 // function definition for find a user using statics method
+export interface UserModel extends Model<TUser> {
+  isUserExistsById(id: string): Promise<TUser>;
+}
+
 export interface UserModel extends Model<TUser> {
   isUserExistsByEmail(email: string): Promise<TUser>;
 }

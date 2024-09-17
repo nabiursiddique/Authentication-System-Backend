@@ -6,9 +6,16 @@ const signInUserValidationSchema = z.object({
     .trim()
     .email({ message: 'Invalid email' })
     .min(1, { message: 'Email is required' }),
+  // password: z.string().min(1, { message: 'Password is required' }),
   password: z.string().min(1, { message: 'Password is required' }),
+});
+
+const changePasswordValidationSchema = z.object({
+  oldPassword: z.string().min(1, { message: 'Old password is required' }),
+  newPassword: z.string().min(1, { message: 'New password is required' }),
 });
 
 export const AuthValidations = {
   signInUserValidationSchema,
+  changePasswordValidationSchema,
 };

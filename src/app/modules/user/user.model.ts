@@ -18,6 +18,10 @@ const userSchema = new Schema<TUser, UserModel>(
     password: {
       type: String,
       required: [true, 'Password is required'],
+      select: 0,
+    },
+    passwordChangedAt: {
+      type: Date,
     },
     role: {
       type: String,
@@ -39,10 +43,14 @@ const userSchema = new Schema<TUser, UserModel>(
 );
 
 //* By using User model we can access these functions from the model
+// function for finding a user in db with _id (using statics feature of mongoose)
+userSchema.statics.isUserExistsById = async function (id) {
+  return await User.findById({ _id: id }).select('+password');
+};
 
-// function for finding a user in db (using statics feature of mongoose)
+// function for finding a user in db with email (using statics feature of mongoose)
 userSchema.statics.isUserExistsByEmail = async function (email) {
-  return await User.findOne({ email: email });
+  return await User.findOne({ email: email }).select('+password');
 };
 
 // function for checking if the user provided password is correct or not
