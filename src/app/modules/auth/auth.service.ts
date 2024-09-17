@@ -30,9 +30,9 @@ const signInUserIntoDB = async (payload: TUserSignIn) => {
   // Creating jwt token and sending it to the client
   const jwtPayload = {
     userId: user._id,
-    name: user.name,
-    email: user.email,
     role: user.role,
+    // name: user.name,
+    // email: user.email,
   };
 
   const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
