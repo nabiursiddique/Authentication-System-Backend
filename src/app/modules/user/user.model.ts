@@ -25,10 +25,12 @@ const userSchema = new Schema<TUser, UserModel>(
         values: ['admin', 'user'],
         message: '{VALUE} is not a valid role',
       },
+      default: 'user',
     },
     isDeleted: {
       type: Boolean,
       default: false,
+      required: true,
     },
   },
   {

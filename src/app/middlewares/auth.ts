@@ -4,8 +4,9 @@ import catchAsync from '../utils/catchAsync';
 import AppError from '../errors/appError';
 import httpStatus from 'http-status';
 import config from '../config';
+import { TUserRole } from '../modules/user/user.interface';
 
-const auth = () => {
+const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     // checking the token
     const token = req.headers.authorization;
@@ -22,7 +23,16 @@ const auth = () => {
           throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
         }
 
-        // we can access user from any where in req
+        const role = (decoded as JwtPayload).role;
+
+        if (requiredRoles && !requiredRoles.includes(role)) {
+          throw new AppError(
+            httpStatus.UNAUTHORIZED,
+            'You are not authorized!!',
+          );
+        }
+
+        // we can access user from anywhere from req
         req.user = decoded as JwtPayload;
         next();
       },
