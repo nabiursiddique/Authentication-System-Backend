@@ -13,6 +13,10 @@ router.post(
   UserControllers.createUser,
 );
 
-router.get('/all-users', auth(USER_ROLE.admin), UserControllers.getAllUsers);
+router.get(
+  '/all-users',
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  UserControllers.getAllUsers,
+);
 
 export const UserRoutes = router;
