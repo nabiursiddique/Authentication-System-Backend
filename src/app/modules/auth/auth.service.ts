@@ -5,6 +5,7 @@ import { TUserSignIn } from './auth.interface';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import bcrypt from 'bcrypt';
+import { createToken } from './auth.utils';
 
 //* Sign in / Login User into DB
 const signInUserIntoDB = async (payload: TUserSignIn) => {
@@ -37,11 +38,21 @@ const signInUserIntoDB = async (payload: TUserSignIn) => {
     // name: user.name,
   };
 
-  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
-    expiresIn: '10d',
-  });
+  // creating access token
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
 
-  return { accessToken };
+  // creating refresh token
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string,
+  );
+
+  return { accessToken, refreshToken };
 };
 
 //* Change password into db
