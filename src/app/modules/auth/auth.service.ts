@@ -98,7 +98,57 @@ const changePasswordIntoDB = async (
   return null;
 };
 
+//* Here we are creating access token using refresh token
+const refreshToken = async (token: string) => {
+  // verifying jwt access token
+  const decoded = jwt.verify(
+    token,
+    config.jwt_refresh_secret as string,
+  ) as JwtPayload;
+
+  const { userId, iat } = decoded;
+
+  // checking if the user is available in db or not
+  const user = await User.isUserExistsById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
+  }
+
+  // checking if the user is deleted or not
+  const isDeleted = user?.isDeleted;
+  if (isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted');
+  }
+
+  // if a user change his password then previously created tokens will not work
+  if (
+    user?.passwordChangedAt &&
+    User.isJWTIssuedBeforePasswordChanged(user.passwordChangedAt, iat as number)
+  ) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!!');
+  }
+
+  // Creating jwt token and sending it to the client
+  const jwtPayload = {
+    userId: user._id,
+    role: user.role,
+    // email: user.email,
+    // name: user.name,
+  };
+
+  // creating access token
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
+  return {
+    accessToken,
+  };
+};
+
 export const AuthServices = {
   signInUserIntoDB,
   changePasswordIntoDB,
+  refreshToken,
 };

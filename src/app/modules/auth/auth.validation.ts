@@ -15,7 +15,12 @@ const changePasswordValidationSchema = z.object({
   newPassword: z.string().min(1, { message: 'New password is required' }),
 });
 
+const refreshTokenValidationSchema = z.object({
+  refreshToken: z.string().min(1, { message: 'Refresh token is required' }),
+});
+
 export const AuthValidations = {
   signInUserValidationSchema,
   changePasswordValidationSchema,
+  refreshTokenValidationSchema,
 };
