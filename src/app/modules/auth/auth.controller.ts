@@ -8,6 +8,7 @@ const signInUser = catchAsync(async (req, res) => {
   const result = await AuthServices.signInUserIntoDB(req.body);
   const { refreshToken, accessToken } = result;
 
+  // setting refresh token into cookie
   res.cookie('refreshToken', refreshToken, {
     secure: config.NODE_ENV === 'production',
     httpOnly: true,
@@ -37,6 +38,7 @@ const changePassword = catchAsync(async (req, res) => {
 });
 
 const refreshToken = catchAsync(async (req, res) => {
+  // getting refresh token from cookie
   const { refreshToken } = req.cookies;
   const result = await AuthServices.refreshToken(refreshToken);
 
