@@ -33,9 +33,9 @@ const signInUserIntoDB = async (payload: TUserSignIn) => {
   // Creating jwt token and sending it to the client
   const jwtPayload = {
     userId: user._id,
+    name: user.name,
+    email: user.email,
     role: user.role,
-    // email: user.email,
-    // name: user.name,
   };
 
   // creating access token
@@ -131,9 +131,9 @@ const refreshToken = async (token: string) => {
   // Creating jwt token and sending it to the client
   const jwtPayload = {
     userId: user._id,
+    name: user.name,
+    email: user.email,
     role: user.role,
-    // email: user.email,
-    // name: user.name,
   };
 
   // creating access token
